@@ -380,13 +380,24 @@ object PipelinedCPUInfo {
   }
 }
 
+object PipelinedDualIssueNoDebug extends App {
+  implicit val conf: CPUConfig = new CPUConfig()
+  ChiselStage.emitSystemVerilogFile(
+    new PipelinedDualIssueCPU,
+    args = Array(
+      "--target-dir", "build_pipelined1"
+    ),
+    firtoolOpts = Array("-disable-all-randomization", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
+  )
+}
+
 object PipelinedDualIssueDebug extends App {
   implicit val conf: CPUConfig = new CPUConfig()
   ChiselStage.emitSystemVerilogFile(
     new PipelinedDualIssueCPU,
     args = Array(
-      "--target-dir", "build_pipelined"
+      "--target-dir", "build_pipelined2"
     ),
-    firtoolOpts = Array("-disable-all-randomization", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
+    firtoolOpts = Array("-disable-all-randomization", "-string-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
 }

@@ -1,2 +1,2 @@
-rm -rf build*
+rm -rf build_*
 rm -rf target
