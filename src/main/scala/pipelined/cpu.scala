@@ -398,6 +398,6 @@ object PipelinedDualIssueDebug extends App {
     args = Array(
       "--target-dir", "build_pipelined2"
     ),
-    firtoolOpts = Array("-disable-all-randomization", "--strip-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
+    firtoolOpts = Array("-disable-all-randomization", "-strip-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
 }
