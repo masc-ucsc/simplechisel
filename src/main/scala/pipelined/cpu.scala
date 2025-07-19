@@ -385,7 +385,7 @@ object PipelinedDualIssueNoDebug extends App {
   ChiselStage.emitSystemVerilogFile(
     new PipelinedDualIssueCPU,
     args = Array(
-      "--target-dir", "build_pipelined1"
+      "--target-dir", "build_pipelined_nd"
     ),
     firtoolOpts = Array("-disable-all-randomization", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
@@ -396,7 +396,7 @@ object PipelinedDualIssueDebug extends App {
   ChiselStage.emitSystemVerilogFile(
     new PipelinedDualIssueCPU,
     args = Array(
-      "--target-dir", "build_pipelined2"
+      "--target-dir", "build_pipelined_d"
     ),
     firtoolOpts = Array("-disable-all-randomization", "-strip-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )

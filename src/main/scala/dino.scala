@@ -241,7 +241,7 @@ object SingleCycleCPUNoDebug extends App {
   ChiselStage.emitSystemVerilogFile(
     new SingleCycleCPU,
     args = Array(
-      "--target-dir", "build_singlecyclecpu"
+      "--target-dir", "build_singlecyclecpu_d"
     ),
     firtoolOpts = Array("-disable-all-randomization", "-strip-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
@@ -252,7 +252,7 @@ object SingleCycleCPUDebug extends App {
   ChiselStage.emitSystemVerilogFile(
     new SingleCycleCPU,
     args = Array(
-      "--target-dir", "build_singlecyclecpu"
+      "--target-dir", "build_singlecyclecpu_nd"
     ),
     firtoolOpts = Array("-disable-all-randomization", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
