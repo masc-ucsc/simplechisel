@@ -1,12 +1,13 @@
 // See README.md for license details.
 
-ThisBuild / scalaVersion     := "2.13.16"
+ThisBuild / scalaVersion     := "2.13.12"
 ThisBuild / version          := "0.1.0"
 ThisBuild / organization     := "%ORGANIZATION%"
 
 val chiselVersion = "7.0.0-RC1"
 
 lazy val root = (project in file("."))
+  .enablePlugins(ScapegoatSbtPlugin)
   .settings(
     name := "%NAME%",
     libraryDependencies ++= Seq(
@@ -21,4 +22,5 @@ lazy val root = (project in file("."))
       "-Ymacro-annotations",
     ),
     addCompilerPlugin("org.chipsalliance" % "chisel-plugin" % chiselVersion cross CrossVersion.full),
+    scapegoatReports := Seq("xml", "html", "markdown"),
   )

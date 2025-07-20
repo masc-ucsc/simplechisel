@@ -339,7 +339,7 @@ class CSRRegFile extends Module{
   //wait for interrupt inst not implemented
   val insn_wfi = system_insn && opcode(5) && priv_sufficient
 
-  private def decodeAny(m: LinkedHashMap[Int,Bits]): Bool = m.map( { case(k: Int, _: Bits) => csr === k.U }).reduce(_ || _)
+  private def decodeAny(m: LinkedHashMap[Int,Bits]): Bool = m.map( { case(k: Int, _: Bits) => csr === k.U }).fold(false.B)(_ || _)
   io.read_illegal := 3.U < csr(9,8) || !decodeAny(read_mapping) 
   io.write_illegal := csr(11,10).andR
   io.system_illegal := 3.U < csr(9,8)
