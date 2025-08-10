@@ -236,23 +236,33 @@ object SingleCycleCPUInfo {
 }
 
 // Main object for testing the CPU setup
+import java.nio.file.{Files, Paths}
+
 object SingleCycleCPUNoDebug extends App {
+  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_singlecyclecpu_d")
+  val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
+  Files.createDirectories(outDir)
+
   implicit val conf = new CPUConfig()
   ChiselStage.emitSystemVerilogFile(
     new SingleCycleCPU,
     args = Array(
-      "--target-dir", "build_singlecyclecpu_d"
+      "--target-dir", outDir.toString
     ),
     firtoolOpts = Array("-disable-all-randomization", "-strip-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
 }
 
 object SingleCycleCPUDebug extends App {
+  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_singlecyclecpu_nd")
+  val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
+  Files.createDirectories(outDir)
+
   implicit val conf = new CPUConfig()
   ChiselStage.emitSystemVerilogFile(
     new SingleCycleCPU,
     args = Array(
-      "--target-dir", "build_singlecyclecpu_nd"
+      "--target-dir", outDir.toString
     ),
     firtoolOpts = Array("-disable-all-randomization", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
   )
