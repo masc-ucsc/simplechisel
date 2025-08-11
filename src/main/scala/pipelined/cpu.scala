@@ -10,6 +10,8 @@ import _root_.circt.stage.ChiselStage
 import dinocpu._
 import dinocpu.components._
 
+import java.nio.file.{Files, Paths}
+
 /**
  * The main CPU definition that hooks up all of the other components.
  *
@@ -381,7 +383,10 @@ object PipelinedCPUInfo {
 }
 
 object PipelinedDualIssueNoDebug extends App {
-  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_pipelined_nd")
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_pipelined_nd")
+    .getOrElse("./build_pipelined_nd")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
   Files.createDirectories(outDir)
 
@@ -396,7 +401,10 @@ object PipelinedDualIssueNoDebug extends App {
 }
 
 object PipelinedDualIssueDebug extends App {
-  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_pipelined_d")
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_pipelined_d")
+    .getOrElse("./build_pipelined_d")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
   Files.createDirectories(outDir)
 

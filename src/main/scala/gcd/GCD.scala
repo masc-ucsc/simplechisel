@@ -41,8 +41,10 @@ class GCD extends Module {
 import java.nio.file.{Files, Paths}
 
 object GCD extends App {
-  //    We normalize to an absolute path to avoid surprises.
-  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_gcd")
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_gcd")
+    .getOrElse("./build_gcd")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
 
   // 2) Ensure the directory exists (idempotent).

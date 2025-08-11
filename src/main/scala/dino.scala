@@ -9,6 +9,8 @@ import dinocpu.components._
 import dinocpu.components.{BaseBranchPredictor, AlwaysTakenPredictor, AlwaysNotTakenPredictor, LocalPredictor, GlobalHistoryPredictor}
 import dinocpu.memory._
 
+import java.nio.file.{Files, Paths}
+
 /**
   * Base CPU module which all CPU models implement
   */
@@ -239,11 +241,14 @@ object SingleCycleCPUInfo {
 import java.nio.file.{Files, Paths}
 
 object SingleCycleCPUNoDebug extends App {
-  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_singlecyclecpu_d")
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_singlecyclecpu_d")
+    .getOrElse("./build_singlecyclecpu_d")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
   Files.createDirectories(outDir)
 
-  implicit val conf = new CPUConfig()
+  implicit val conf: CPUConfig = new CPUConfig()
   ChiselStage.emitSystemVerilogFile(
     new SingleCycleCPU,
     args = Array(
@@ -254,11 +259,14 @@ object SingleCycleCPUNoDebug extends App {
 }
 
 object SingleCycleCPUDebug extends App {
-  val outDirStr: String = sys.env.get("BUILD_DIR").filter(_.nonEmpty).getOrElse("build_singlecyclecpu_nd")
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_singlecyclecpu_nd")
+    .getOrElse("./build_singlecyclecpu_nd")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
   Files.createDirectories(outDir)
 
-  implicit val conf = new CPUConfig()
+  implicit val conf: CPUConfig = new CPUConfig()
   ChiselStage.emitSystemVerilogFile(
     new SingleCycleCPU,
     args = Array(
