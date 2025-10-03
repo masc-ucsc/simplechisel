@@ -30,9 +30,13 @@ profiles:
         description: "Run scapegoat linting on Scala/Chisel code"
         command: "sbt scapegoat"
         cwd: "$HAGENT_REPO_DIR"
-      - name: synthesize
-        description: "Synthesize GCD for Lattice FPGA using Yosys"
+      - name: synth_fpga
+        description: "FPGA synthesis GCD for Lattice using Yosys"
         command: "yosys -p 'read_verilog -sv build_gcd/*.sv; synth_lattice -family ecp5 -top GCD; write_json gcd_lattice.json'"
+        cwd: "$HAGENT_BUILD_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis GCD using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta --netlist build_gcd/netlist.v --top GCD -F build_gcd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
 
   - name: singlecyclecpu_nd
@@ -54,9 +58,13 @@ profiles:
         description: "Run scapegoat linting on Scala/Chisel code"
         command: "sbt scapegoat"
         cwd: "$HAGENT_REPO_DIR"
-      - name: synthesize
-        description: "Synthesize Single Cycle CPU for Lattice FPGA using Yosys"
+      - name: synth_fpga
+        description: "FPGA synthesis of Single Cycle CPU for Lattice using Yosys"
         command: "yosys -p 'read_verilog -sv build_singlecyclecpu_nd/*.sv; synth_lattice -family ecp5 -top SingleCycleCPU; write_json singlecpu_nd_lattice.json'"
+        cwd: "$HAGENT_BUILD_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis Single Cycle CPU using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta --netlist build_singlecyclecpu_nd/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
 
   - name: singlecyclecpu_d
@@ -78,10 +86,14 @@ profiles:
         description: "Run scapegoat linting on Scala/Chisel code"
         command: "sbt scapegoat"
         cwd: "$HAGENT_REPO_DIR"
-      - name: synthesize
-        description: "Synthesize Single Cycle CPU Debug for Lattice FPGA using Yosys"
+      - name: synth_fpga
+        description: "FPGA synthesis Single Cycle CPU Debug for FPGA using Yosys"
         command: "yosys -p 'read_verilog -sv build_singlecyclecpu_d/*.sv; synth_lattice -family ecp5 -top SingleCycleCPU; write_json singlecpu_d_lattice.json'"
         cwd: "$HAGENT_REPO_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis Single Cycle CPU Debug using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta --netlist build_singlecyclecpu_d/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_d/filelist.f"
+        cwd: "$HAGENT_BUILD_DIR"
 
   - name: pipelined_d
     description: "Profile for building Pipelined Dual Issue CPU with debug"
@@ -102,10 +114,14 @@ profiles:
         description: "Run scapegoat linting on Scala/Chisel code"
         command: "sbt scapegoat"
         cwd: "$HAGENT_REPO_DIR"
-      - name: synthesize
-        description: "Synthesize Pipelined CPU Debug for Lattice FPGA using Yosys"
+      - name: synth_fpga
+        description: "FPGA synthesis Pipelined Dual Issue CPU Debug for Lattice using Yosys"
         command: "yosys -p 'read_verilog -sv build_pipelined_d/*.sv; synth_lattice -family ecp5 -top PipelinedDualIssueCPU; write_json pipelined_d_lattice.json'"
         cwd: "$HAGENT_REPO_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis Pipelined Dual Issue CPU Debug using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta --netlist build_pipelined_d/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_d/filelist.f"
+        cwd: "$HAGENT_BUILD_DIR"
 
   - name: pipelined_nd
     description: "Profile for building Pipelined Dual Issue CPU without debug"
@@ -126,7 +142,11 @@ profiles:
         description: "Run scapegoat linting on Scala/Chisel code"
         command: "sbt scapegoat"
         cwd: "$HAGENT_REPO_DIR"
-      - name: synthesize
-        description: "Synthesize Pipelined CPU for Lattice FPGA using Yosys"
+      - name: synth_fpga
+        description: "FPGA synthesis Pipelined CPU for Lattice using Yosys"
         command: "yosys -p 'read_verilog -sv build_pipelined_nd/*.sv; synth_lattice -family ecp5 -top PipelinedDualIssueCPU; write_json pipelined_nd_lattice.json'"
         cwd: "$HAGENT_REPO_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis Pipelined Dual Issue CPU using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta --netlist build_pipelined_nd/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_nd/filelist.f"
+        cwd: "$HAGENT_BUILD_DIR"
