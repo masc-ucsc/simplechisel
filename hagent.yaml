@@ -36,7 +36,7 @@ profiles:
         cwd: "$HAGENT_BUILD_DIR"
       - name: synth_asic
         description: "ASIC synthesis GCD using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --netlist build_gcd/netlist.v --top GCD -F build_gcd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_gcd/netlist.v --top GCD -F build_gcd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
 
   - name: singlecyclecpu_nd
@@ -64,7 +64,7 @@ profiles:
         cwd: "$HAGENT_BUILD_DIR"
       - name: synth_asic
         description: "ASIC synthesis Single Cycle CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --netlist build_singlecyclecpu_nd/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_singlecyclecpu_nd/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
 
   - name: singlecyclecpu_d
@@ -92,7 +92,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Single Cycle CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --netlist build_singlecyclecpu_d/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_singlecyclecpu_d/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
 
   - name: pipelined_d
@@ -120,7 +120,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --netlist build_pipelined_d/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_pipelined_d/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
 
   - name: pipelined_nd
@@ -148,5 +148,5 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --netlist build_pipelined_nd/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_pipelined_nd/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
