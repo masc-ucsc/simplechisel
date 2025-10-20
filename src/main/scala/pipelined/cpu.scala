@@ -382,11 +382,46 @@ object PipelinedCPUInfo {
   }
 }
 
-object PipelinedDualIssueNoDebug extends App {
+object PipelinedNoDebug extends App {
   val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
     .filter(_.nonEmpty)
     .map(dir => s"$dir/build_pipelined_nd")
     .getOrElse("./build_pipelined_nd")
+  val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
+  Files.createDirectories(outDir)
+
+  implicit val conf: CPUConfig = new CPUConfig()
+  ChiselStage.emitSystemVerilogFile(
+    new PipelinedCPU,
+    args = Array(
+      "--target-dir", outDir.toString
+    ),
+    firtoolOpts = Array("-disable-all-randomization", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
+  )
+}
+
+object PipelinedDebug extends App {
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_pipelined_d")
+    .getOrElse("./build_pipelined_d")
+  val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
+  Files.createDirectories(outDir)
+
+  implicit val conf: CPUConfig = new CPUConfig()
+  ChiselStage.emitSystemVerilogFile(
+    new PipelinedCPU,
+    args = Array(
+      "--target-dir", outDir.toString
+    ),
+    firtoolOpts = Array("-disable-all-randomization", "-strip-debug-info", "-default-layer-specialization=enable",  "--lowering-options=disallowPackedArrays,disallowLocalVariables")
+  )
+}
+object PipelinedDualIssueNoDebug extends App {
+  val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
+    .filter(_.nonEmpty)
+    .map(dir => s"$dir/build_dualissue_nd")
+    .getOrElse("./build_dualissue_nd")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
   Files.createDirectories(outDir)
 
@@ -403,8 +438,8 @@ object PipelinedDualIssueNoDebug extends App {
 object PipelinedDualIssueDebug extends App {
   val outDirStr: String = sys.env.get("HAGENT_BUILD_DIR")
     .filter(_.nonEmpty)
-    .map(dir => s"$dir/build_pipelined_d")
-    .getOrElse("./build_pipelined_d")
+    .map(dir => s"$dir/build_dualissue_d")
+    .getOrElse("./build_dualissue_d")
   val outDir = Paths.get(outDirStr).toAbsolutePath.normalize
   Files.createDirectories(outDir)
 

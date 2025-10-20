@@ -92,15 +92,98 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Single Cycle CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_singlecyclecpu_d/netlist.v --top SingleCycleCPU -F build_singlecyclecpu_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py {{top}} {{top_synth}} --sta --netlist build_singlecyclecpu_d/netlist.v -F build_singlecyclecpu_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: top_synth
+            description: "Optional top synthesis module for faster synthesis that avoids top elaboration"
+            format: "--top-synthesis {value}:"
+            default: ""
+          - name: top
+            description: "Top module for elaboration"
+            format: "--top {value}:"
+            default: "--top SingleCycleCPU"
 
   - name: pipelined_d
-    description: "Profile for building Pipelined Dual Issue CPU with debug"
+    description: "Profile for building Pipelined Single Issue CPU with debug"
     memory: 4  # in GB
     configuration:
       source: "track_repo_dir('src/main/scala', ext='.scala')"
       output: "track_build_dir('build_pipelined_d', ext='.sv')"
+      environment:
+        SCALA_HOME: "/usr/local/scala"
+        SBT_OPTS: "-Xmx2G -XX:+UseG1GC"
+        PATH: "$PATH:/usr/local/scala/bin"
+    apis:
+      - name: compile
+        description: "Compile Pipelined Single Issue CPU (Debug) and generate Verilog"
+        command: "sbt \"runMain dinocpu.pipelined.PipelinedDebug\""
+        cwd: "$HAGENT_REPO_DIR"
+      - name: lint
+        description: "Run scapegoat linting on Scala/Chisel code"
+        command: "sbt scapegoat"
+        cwd: "$HAGENT_REPO_DIR"
+      - name: synth_fpga
+        description: "FPGA synthesis Pipelined Single Issue CPU Debug for Lattice using Yosys"
+        command: "yosys -p 'read_verilog -sv build_pipelined_d/*.sv; synth_lattice -family ecp5 -top PipelinedCPU; write_json pipelined_d_lattice.json'"
+        cwd: "$HAGENT_REPO_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis Pipelined Single Issue CPU Debug using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta {{top}} {{top_synth}} --netlist build_pipelined_d/netlist.v -F build_pipelined_d/filelist.f"
+        cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: top_synth
+            description: "Optional top synthesis module for faster synthesis that avoids top elaboration"
+            format: "--top-synthesis {value}:"
+            default: ""
+          - name: top
+            description: "Top module for elaboration"
+            format: "--top {value}:"
+            default: "--top PipelinedCPU"
+
+  - name: pipelined_nd
+    description: "Profile for building Pipelined Single Issue CPU without debug"
+    memory: 4  # in GB
+    configuration:
+      source: "track_repo_dir('src/main/scala', ext='.scala')"
+      output: "track_build_dir('build_pipelined_nd', ext='.sv')"
+      environment:
+        SCALA_HOME: "/usr/local/scala"
+        SBT_OPTS: "-Xmx2G -XX:+UseG1GC"
+        PATH: "$PATH:/usr/local/scala/bin"
+    apis:
+      - name: compile
+        description: "Compile Pipelined Single Issue CPU (No Debug) and generate Verilog"
+        command: "sbt \"runMain dinocpu.pipelined.PipelinedNoDebug\""
+        cwd: "$HAGENT_REPO_DIR"
+      - name: lint
+        description: "Run scapegoat linting on Scala/Chisel code"
+        command: "sbt scapegoat"
+        cwd: "$HAGENT_REPO_DIR"
+      - name: synth_fpga
+        description: "FPGA synthesis Pipelined CPU for Lattice using Yosys"
+        command: "yosys -p 'read_verilog -sv build_pipelined_nd/*.sv; synth_lattice -family ecp5 -top PipelinedCPU; write_json pipelined_nd_lattice.json'"
+        cwd: "$HAGENT_REPO_DIR"
+      - name: synth_asic
+        description: "ASIC synthesis Pipelined Single Issue CPU using Yosys"
+        command: "/code/hagent/scripts/synth.py --sta {{top}} {{top_synth}} --netlist build_pipelined_nd/netlist.v -F build_pipelined_nd/filelist.f"
+        cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: top_synth
+            description: "Optional top synthesis module for faster synthesis that avoids top elaboration"
+            format: "--top-synthesis {value}:"
+            default: ""
+          - name: top
+            description: "Top module for elaboration"
+            format: "--top {value}:"
+            default: "--top PipelinedCPU"
+
+  - name: dualissue_d
+    description: "Profile for building Pipelined Dual Issue CPU with debug"
+    memory: 4  # in GB
+    configuration:
+      source: "track_repo_dir('src/main/scala', ext='.scala')"
+      output: "track_build_dir('build_dualissue_d', ext='.sv')"
       environment:
         SCALA_HOME: "/usr/local/scala"
         SBT_OPTS: "-Xmx2G -XX:+UseG1GC"
@@ -116,19 +199,28 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_fpga
         description: "FPGA synthesis Pipelined Dual Issue CPU Debug for Lattice using Yosys"
-        command: "yosys -p 'read_verilog -sv build_pipelined_d/*.sv; synth_lattice -family ecp5 -top PipelinedDualIssueCPU; write_json pipelined_d_lattice.json'"
+        command: "yosys -p 'read_verilog -sv build_dualissue_d/*.sv; synth_lattice -family ecp5 -top PipelinedDualIssueCPU; write_json pipelined_d_lattice.json'"
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_pipelined_d/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta {{top}} {{top_synth}} --netlist build_dualissue_d/netlist.v -F build_dualissue_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: top_synth
+            description: "Optional top synthesis module for faster synthesis that avoids top elaboration"
+            format: "--top-synthesis {value}:"
+            default: ""
+          - name: top
+            description: "Top module for elaboration"
+            format: "--top {value}:"
+            default: "--top PipelinedDualIssueCPU"
 
-  - name: pipelined_nd
+  - name: dualissue_nd
     description: "Profile for building Pipelined Dual Issue CPU without debug"
     memory: 4  # in GB
     configuration:
       source: "track_repo_dir('src/main/scala', ext='.scala')"
-      output: "track_build_dir('build_pipelined_nd', ext='.sv')"
+      output: "track_build_dir('build_dualissue_nd', ext='.sv')"
       environment:
         SCALA_HOME: "/usr/local/scala"
         SBT_OPTS: "-Xmx2G -XX:+UseG1GC"
@@ -144,9 +236,19 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_fpga
         description: "FPGA synthesis Pipelined CPU for Lattice using Yosys"
-        command: "yosys -p 'read_verilog -sv build_pipelined_nd/*.sv; synth_lattice -family ecp5 -top PipelinedDualIssueCPU; write_json pipelined_nd_lattice.json'"
+        command: "yosys -p 'read_verilog -sv build_dualissue_nd/*.sv; synth_lattice -family ecp5 -top PipelinedDualIssueCPU; write_json dualissue_nd_lattice.json'"
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta --tech-dir /code/workspace/tech --netlist build_pipelined_nd/netlist.v --top PipelinedDualIssueCPU -F build_pipelined_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta {{top}} {{top_synth} --tech-dir /code/workspace/tech --netlist build_dualissue_nd/netlist.v -F build_dualissue_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: top_synth
+            description: "Optional top synthesis module for faster synthesis that avoids top elaboration"
+            format: "--top-synthesis {value}:"
+            default: ""
+          - name: top
+            description: "Top module for elaboration"
+            format: "--top {value}:"
+            default: "--top PipelinedDualIssueCPU"
+
