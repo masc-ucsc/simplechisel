@@ -240,7 +240,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --sta {{top}} {{top_synth} --tech-dir /code/workspace/tech --netlist build_dualissue_nd/netlist.v -F build_dualissue_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --sta {{top}} {{top_synth}} --tech-dir /code/workspace/tech --netlist build_dualissue_nd/netlist.v -F build_dualissue_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
