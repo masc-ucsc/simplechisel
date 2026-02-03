@@ -36,12 +36,22 @@ profiles:
         cwd: "$HAGENT_BUILD_DIR"
       - name: synth_asic
         description: "ASIC synthesis GCD using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-sta --run-synth --tag reference --dir build_gcd --top GCD -- -F build_gcd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{tag}} --dir build_gcd --top GCD -- -F build_gcd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaborate a module with hierarchy"
-        command: "/code/hagent/scripts/synth.py --run-elab --tag reference --dir build_gcd --top GCD -- -F build_gcd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-elab {{tag}} --dir build_gcd --top GCD -- -F build_gcd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
+        options:
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
 
   - name: singlecyclecpu_nd
     description: "Profile for building Single Cycle CPU without debug from Chisel sources"
@@ -68,7 +78,7 @@ profiles:
         cwd: "$HAGENT_BUILD_DIR"
       - name: synth_asic
         description: "ASIC synthesis Single Cycle CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-sta --run-synth --tag reference --dir build_singlecyclecpu_nd {{top}} {{top_synth}} -- -F build_singlecyclecpu_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{tag}} --dir build_singlecyclecpu_nd {{top}} {{top_synth}} -- -F build_singlecyclecpu_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -79,9 +89,13 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top SingleCycleCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaborate Single Cycle CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-elab --tag reference --dir build_singlecyclecpu_nd {{top}} {{top_synth}} -- -F build_singlecyclecpu_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-elab {{tag}} --dir build_singlecyclecpu_nd {{top}} {{top_synth}} -- -F build_singlecyclecpu_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -92,6 +106,10 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top SingleCycleCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
 
   - name: singlecyclecpu_d
     description: "Profile for building Single Cycle CPU with debug from Chisel sources"
@@ -118,7 +136,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Single Cycle CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py {{top}} {{top_synth}} --run-sta --run-synth --tag reference --dir build_singlecyclecpu_d -- -F build_singlecyclecpu_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py {{top}} {{top_synth}} --run-sta --run-synth {{tag}} --dir build_singlecyclecpu_d -- -F build_singlecyclecpu_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -129,9 +147,13 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top SingleCycleCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaborate Single Cycle CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py {{top}} {{top_synth}} --run-elab --tag reference --dir build_singlecyclecpu_d -- -F build_singlecyclecpu_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py {{top}} {{top_synth}} --run-elab {{tag}} --dir build_singlecyclecpu_d -- -F build_singlecyclecpu_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -142,6 +164,10 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top SingleCycleCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
 
   - name: pipelined_d
     description: "Profile for building Pipelined Single Issue CPU with debug"
@@ -168,7 +194,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Single Issue CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} --tag reference --dir build_pipelined_d -- -F build_pipelined_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} {{tag}} --dir build_pipelined_d -- -F build_pipelined_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -179,9 +205,13 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaborate Pipelined Single Issue CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} --tag reference --dir build_pipelined_d -- -F build_pipelined_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} {{tag}} --dir build_pipelined_d -- -F build_pipelined_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -192,6 +222,10 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
 
   - name: pipelined_nd
     description: "Profile for building Pipelined Single Issue CPU without debug"
@@ -218,7 +252,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Single Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} --tag reference --dir build_pipelined_nd -- -F build_pipelined_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} {{tag}} --dir build_pipelined_nd -- -F build_pipelined_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -229,9 +263,13 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaborate Pipelined Single Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} --tag reference --dir build_pipelined_nd -- -F build_pipelined_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} {{tag}} --dir build_pipelined_nd -- -F build_pipelined_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -242,6 +280,10 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
 
   - name: dualissue_d
     description: "Profile for building Pipelined Dual Issue CPU with debug"
@@ -268,7 +310,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} --tag reference --dir build_dualissue_d -- -F build_dualissue_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} {{tag}} --dir build_dualissue_d -- -F build_dualissue_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -279,9 +321,13 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedDualIssueCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaboration Pipelined Dual Issue CPU Debug using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} --tag reference --dir build_dualissue_d -- -F build_dualissue_d/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} {{tag}} --dir build_dualissue_d -- -F build_dualissue_d/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -292,6 +338,10 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedDualIssueCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
 
   - name: dualissue_nd
     description: "Profile for building Pipelined Dual Issue CPU without debug"
@@ -318,7 +368,7 @@ profiles:
         cwd: "$HAGENT_REPO_DIR"
       - name: synth_asic
         description: "ASIC synthesis Pipelined Dual Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} --tag reference --dir build_dualissue_nd -- -F build_dualissue_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-sta --run-synth {{top}} {{top_synth}} {{tag}} --dir build_dualissue_nd -- -F build_dualissue_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -329,9 +379,13 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedDualIssueCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
       - name: elab
         description: "Elaborate Pipelined Dual Issue CPU using Yosys"
-        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} --tag reference --dir build_dualissue_nd -- -F build_dualissue_nd/filelist.f"
+        command: "/code/hagent/scripts/synth.py --run-elab {{top}} {{top_synth}} {{tag}} --dir build_dualissue_nd -- -F build_dualissue_nd/filelist.f"
         cwd: "$HAGENT_BUILD_DIR"
         options:
           - name: top_synth
@@ -342,3 +396,7 @@ profiles:
             description: "Top module for elaboration"
             format: "--top {value}"
             default: "--top PipelinedDualIssueCPU"
+          - name: tag
+            description: "Tag for elaboration"
+            format: "--tag {value}"
+            default: "--tag reference"
