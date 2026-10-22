@@ -449,6 +449,7 @@ object PipelinedDualIssueNoDebug extends App {
   Files.createDirectories(outDir)
 
   implicit val conf: CPUConfig = new CPUConfig()
+  conf.cpuType = "pipelined-dual-issue"
   ChiselStage.emitSystemVerilogFile(
     new PipelinedDualIssueCPU,
     args = Array(
@@ -478,6 +479,7 @@ object PipelinedDualIssueDebug extends App {
   Files.createDirectories(outDir)
 
   implicit val conf: CPUConfig = new CPUConfig()
+  conf.cpuType = "pipelined-dual-issue"
   ChiselStage.emitSystemVerilogFile(
     new PipelinedDualIssueCPU,
     args = Array(
